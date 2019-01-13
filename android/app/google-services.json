@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "910539670225",
+    "firebase_url": "https://flutterchatapp-a28f7.firebaseio.com",
+    "project_id": "flutterchatapp-a28f7",
+    "storage_bucket": "flutterchatapp-a28f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910539670225:android:803bd2a516dadbec",
+        "android_client_info": {
+          "package_name": "mohak.fchat.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910539670225-3gif84a78g1ndkaiahruasnh63m8mtmo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mohak.fchat.app",
+            "certificate_hash": "c0367f976f474b02d25e79d452dd3124a5ce8df9"
+          }
+        },
+        {
+          "client_id": "910539670225-pbbhu109govqb0h8mjjc7dbhrkqj8tnd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8GFBCF0_4XfVHrU_erYryodtAv6TDqOk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910539670225-pbbhu109govqb0h8mjjc7dbhrkqj8tnd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
