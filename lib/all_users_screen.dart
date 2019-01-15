@@ -93,11 +93,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
                 ),
               )
             : Center(
-                child: Text("No Users Yet",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold)),
+                child: CircularProgressIndicator(),
               ));
   }
 }
