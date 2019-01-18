@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>910539670225-penj00c2i0s8fghbl1h1idtqfo8aiia5.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.910539670225-penj00c2i0s8fghbl1h1idtqfo8aiia5</string>
+	<key>API_KEY</key>
+	<string>AIzaSyATD5ctDi58gTLg1Ilkmw1ZV26_WyIZ0So</string>
+	<key>GCM_SENDER_ID</key>
+	<string>910539670225</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>mohak.fchat.app</string>
+	<key>PROJECT_ID</key>
+	<string>flutterchatapp-a28f7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flutterchatapp-a28f7.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:910539670225:ios:803bd2a516dadbec</string>
+	<key>DATABASE_URL</key>
+	<string>https://flutterchatapp-a28f7.firebaseio.com</string>
+</dict>
+</plist>
