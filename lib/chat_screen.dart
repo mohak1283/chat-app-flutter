@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat_app/full_screen_image.dart';
 import 'package:chat_app/models/message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               onPressed: () {
                 pickImage();
-                },
+              },
             ),
           ),
           Flexible(
@@ -180,26 +181,55 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  void pickImage() async {
+  Future<String> pickImage() async {
     var selectedImage =
         await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       imageFile = selectedImage;
     });
-    _storageReference = FirebaseStorage.instance.ref().child('${DateTime.now().millisecondsSinceEpoch}');
-    StorageUploadTask task = _storageReference.putFile(imageFile);
-    if(task.isComplete || task.isSuccessful) {
-      Future<String> url = await _storageReference.getDownloadURL();
-      url.then((photoUrl) {
-        print("PHOTO URL : $photoUrl");
-        uploadImageToDb(photoUrl);
+    _storageReference = FirebaseStorage.instance
+        .ref()
+        .child('${DateTime.now().millisecondsSinceEpoch}');
+    StorageUploadTask storageUploadTask = _storageReference.putFile(imageFile);
+    var url = await (await storageUploadTask.onComplete).ref.getDownloadURL();
 
-      });
-    }
+    print("URL: $url");
+    uploadImageToDb(url);
+    return url;
   }
 
   void uploadImageToDb(String downloadUrl) {
-    //TODO: upload image to db
+    _message = Message.withoutMessage(
+        receiverUid: widget.receiverUid,
+        senderUid: _senderuid,
+        photoUrl: downloadUrl,
+        timestamp: DateTime.now().millisecondsSinceEpoch,
+        type: 'image');
+    var map = Map<String, dynamic>();
+    map['senderUid'] = _message.senderUid;
+    map['receiverUid'] = _message.receiverUid;
+    map['type'] = _message.type;
+    map['timestamp'] = _message.timestamp;
+    map['photoUrl'] = _message.photoUrl;
+
+    print("Map : ${map}");
+    _collectionReference = Firestore.instance
+        .collection("messages")
+        .document(_message.senderUid)
+        .collection(widget.receiverUid);
+
+    _collectionReference.add(map).whenComplete(() {
+      print("Messages added to db");
+    });
+
+    _collectionReference = Firestore.instance
+        .collection("messages")
+        .document(widget.receiverUid)
+        .collection(_message.senderUid);
+
+    _collectionReference.add(map).whenComplete(() {
+      print("Messages added to db");
+    });
   }
 
   void sendMessage() async {
@@ -244,14 +274,13 @@ class _ChatScreenState extends State<ChatScreen> {
             .collection('messages')
             .document(_senderuid)
             .collection(widget.receiverUid)
-            .orderBy('timestamp', descending: false)
+            .orderBy('timestamp')
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
-            //child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(themeColor)));
           } else {
             listItem = snapshot.data.documents;
             return ListView.builder(
@@ -259,7 +288,6 @@ class _ChatScreenState extends State<ChatScreen> {
               itemBuilder: (context, index) =>
                   chatMessageItem(snapshot.data.documents[index]),
               itemCount: snapshot.data.documents.length,
-              //reverse: true,
               // controller: listScrollController,
             );
           }
@@ -322,10 +350,28 @@ class _ChatScreenState extends State<ChatScreen> {
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold),
                         ),
-                  new Text(
-                    snapshot['message'],
-                    style: TextStyle(color: Colors.black, fontSize: 14.0),
-                  ),
+                  snapshot['type'] == 'text'
+                      ? new Text(
+                          snapshot['message'],
+                          style: TextStyle(color: Colors.black, fontSize: 14.0),
+                        )
+                      : InkWell(
+                          onTap: (() {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => FullScreenImage(photoUrl: snapshot['photoUrl'],)));
+                          }),
+                          child: Hero(
+                            tag: snapshot['photoUrl'],
+                            child: FadeInImage(
+                              image: NetworkImage(snapshot['photoUrl']),
+                              placeholder: AssetImage('assets/noimage.jpeg'),
+                              width: 200.0,
+                              height: 200.0,
+                            ),
+                          ),
+                        )
                 ],
               )
             ],

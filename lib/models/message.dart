@@ -10,6 +10,7 @@ class Message {
   String photoUrl;
 
   Message({this.senderUid, this.receiverUid, this.type, this.message, this.timestamp, this.photoUrl});
+  Message.withoutMessage({this.senderUid, this.receiverUid, this.type, this.timestamp, this.photoUrl});
 
   Map toMap() {
     var map = Map<String, dynamic>();
