@@ -21,7 +21,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   Message _message;
   var _formKey = GlobalKey<FormState>();
-  List<Message> _messagesList = List<Message>();
   var map = Map<String, dynamic>();
   CollectionReference _collectionReference;
   DocumentReference _receiverDocumentReference;
@@ -30,18 +29,17 @@ class _ChatScreenState extends State<ChatScreen> {
   DocumentSnapshot documentSnapshot;
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   String _senderuid;
-  var listItemSize;
   var listItem;
   String receiverPhotoUrl, senderPhotoUrl, receiverName, senderName;
   StreamSubscription<DocumentSnapshot> subscription;
   File imageFile;
   StorageReference _storageReference;
-
   TextEditingController _messageController;
 
   @override
   void initState() {
     super.initState();
+    
     _messageController = TextEditingController();
     getUID().then((user) {
       setState(() {
@@ -203,7 +201,7 @@ class _ChatScreenState extends State<ChatScreen> {
         receiverUid: widget.receiverUid,
         senderUid: _senderuid,
         photoUrl: downloadUrl,
-        timestamp: DateTime.now().millisecondsSinceEpoch,
+        timestamp: FieldValue.serverTimestamp(),
         type: 'image');
     var map = Map<String, dynamic>();
     map['senderUid'] = _message.senderUid;
@@ -240,8 +238,8 @@ class _ChatScreenState extends State<ChatScreen> {
         receiverUid: widget.receiverUid,
         senderUid: _senderuid,
         message: text,
-        timestamp: DateTime.now().millisecondsSinceEpoch,
-        type: text != null ? 'text' : 'image');
+        timestamp: FieldValue.serverTimestamp(),
+        type: 'text');
     print(
         "receiverUid: ${widget.receiverUid} , senderUid : ${_senderuid} , message: ${text}");
     print(
@@ -274,7 +272,7 @@ class _ChatScreenState extends State<ChatScreen> {
             .collection('messages')
             .document(_senderuid)
             .collection(widget.receiverUid)
-            .orderBy('timestamp')
+            .orderBy('timestamp', descending: false)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -288,7 +286,6 @@ class _ChatScreenState extends State<ChatScreen> {
               itemBuilder: (context, index) =>
                   chatMessageItem(snapshot.data.documents[index]),
               itemCount: snapshot.data.documents.length,
-              // controller: listScrollController,
             );
           }
         },
@@ -304,28 +301,22 @@ class _ChatScreenState extends State<ChatScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Opacity(
-          child: Divider(
-            height: 0.3,
-            color: Colors.grey,
-          ),
-          opacity: 0.4,
-        ),
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: snapshot['senderUid'] == _senderuid?
+            MainAxisAlignment.end : MainAxisAlignment.start,
             children: <Widget>[
               snapshot['senderUid'] == _senderuid
                   ? CircleAvatar(
                       backgroundImage: senderPhotoUrl == null
-                          ? AssetImage('assets/noimage.jpeg')
+                          ? AssetImage('assets/blankimage.png')
                           : NetworkImage(senderPhotoUrl),
                       radius: 20.0,
                     )
                   : CircleAvatar(
                       backgroundImage: receiverPhotoUrl == null
-                          ? AssetImage('assets/noimage.jpeg')
+                          ? AssetImage('assets/blankimage.png')
                           : NetworkImage(receiverPhotoUrl),
                       radius: 20.0,
                     ),
@@ -366,7 +357,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             tag: snapshot['photoUrl'],
                             child: FadeInImage(
                               image: NetworkImage(snapshot['photoUrl']),
-                              placeholder: AssetImage('assets/noimage.jpeg'),
+                              placeholder: AssetImage('assets/blankimage.png'),
                               width: 200.0,
                               height: 200.0,
                             ),

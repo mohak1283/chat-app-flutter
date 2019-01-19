@@ -83,10 +83,10 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
                             context,
                             new MaterialPageRoute(
                                 builder: (context) => ChatScreen(
-                                      name: usersList[index].data['name'],
-                                      photoUrl: usersList[index].data['photoUrl'],
-                                      receiverUid: usersList[index].data['uid']
-                                    )));
+                                    name: usersList[index].data['name'],
+                                    photoUrl: usersList[index].data['photoUrl'],
+                                    receiverUid:
+                                        usersList[index].data['uid'])));
                       }),
                     );
                   }),

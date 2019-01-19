@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
     return user;
   }
 
-
   void addDataToDb(FirebaseUser user) {
     _userDetails.name = user.displayName;
     _userDetails.emailId = user.email;
@@ -42,8 +41,8 @@ class _HomePageState extends State<HomePage> {
 
     _documentReference.get().then((documentSnapshot) {
       if (documentSnapshot.exists) {
-        Navigator.pushReplacement(
-            context, new MaterialPageRoute(builder: (context) => AllUsersScreen()));
+        Navigator.pushReplacement(context,
+            new MaterialPageRoute(builder: (context) => AllUsersScreen()));
       } else {
         _documentReference.setData(mapData).whenComplete(() {
           print("Users Colelction added to Database");
