@@ -22,9 +22,13 @@ class _HomePageState extends State<HomePage> {
     GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
     GoogleSignInAuthentication _signInAuthentication =
         await _signInAccount.authentication;
-    FirebaseUser user = await _firebaseAuth.signInWithGoogle(
+
+    AuthCredential authCredential = GoogleAuthProvider.getCredential(
         idToken: _signInAuthentication.idToken,
         accessToken: _signInAuthentication.accessToken);
+
+    FirebaseUser user =
+        await _firebaseAuth.signInWithCredential(authCredential);
     return user;
   }
 
